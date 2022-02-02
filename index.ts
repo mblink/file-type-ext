@@ -92,12 +92,6 @@ export const fileTypeExt = async (input: Buffer | Uint8Array | ArrayBuffer): Pro
                 mime: 'application/vnd.ms-powerpoint'
             };
         }
-        // if (type && type.ext === "msi") {
-        //     return {
-        //         ext: 'msi',
-        //         mime: 'application/x-msi'
-        //     };
-        // }
     }
 
     return type
