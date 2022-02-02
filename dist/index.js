@@ -40,81 +40,84 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.minimumBytes = exports.fileTypeExt = void 0;
-var file_type_1 = __importDefault(require("file-type"));
-exports.fileTypeExt = function (input) {
-    if (!(input instanceof Uint8Array || input instanceof ArrayBuffer || Buffer.isBuffer(input))) {
-        throw new TypeError("Expected the `input` argument to be of type `Uint8Array` or `Buffer` or `ArrayBuffer`, got `" + typeof input + "`");
-    }
-    var buffer = input instanceof Uint8Array ? input : new Uint8Array(input);
-    if (!(buffer && buffer.length > 1)) {
-        return;
-    }
-    var check = function (header, options) {
-        for (var i = 0; i < header.length; i++) {
-            // If a bitmask is set
-            if (options.mask) {
-                // If header doesn't equal `buf` with bits masked off
-                if (header[i] !== (options.mask[i] & buffer[i + options.offset])) {
-                    return false;
+var browser_1 = __importDefault(require("file-type/browser"));
+var fileTypeExt = function (input) { return __awaiter(void 0, void 0, void 0, function () {
+    var buffer, check, type, sectorSize, index;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                if (!(input instanceof Uint8Array || input instanceof ArrayBuffer || Buffer.isBuffer(input))) {
+                    throw new TypeError("Expected the `input` argument to be of type `Uint8Array` or `Buffer` or `ArrayBuffer`, got `".concat(typeof input, "`"));
                 }
-            }
-            else if (header[i] !== buffer[i + options.offset]) {
-                return false;
-            }
+                buffer = input instanceof Uint8Array ? input : new Uint8Array(input);
+                if (!(buffer && buffer.length > 1)) {
+                    return [2 /*return*/];
+                }
+                check = function (header, options) {
+                    for (var i = 0; i < header.length; i++) {
+                        // If a bitmask is set
+                        if (options.mask) {
+                            // If header doesn't equal `buf` with bits masked off
+                            if (header[i] !== (options.mask[i] & buffer[i + options.offset])) {
+                                return false;
+                            }
+                        }
+                        else if (header[i] !== buffer[i + options.offset]) {
+                            return false;
+                        }
+                    }
+                    return true;
+                };
+                return [4 /*yield*/, browser_1.default.fileTypeFromBuffer(buffer)];
+            case 1:
+                type = _a.sent();
+                if (type == null) {
+                    sectorSize = 1 << buffer[30];
+                    index = (buffer[49] * 256) + buffer[48];
+                    index = ((index + 1) * sectorSize) + 80;
+                    // If the CLSID block is located outside the buffer, it will return an extra field `minimumRequiredBytes`.
+                    // Therefore, user can optionally retry it with a larger buffer.
+                    if (index + 16 > buffer.length) {
+                        return [2 /*return*/, {
+                                ext: 'msi',
+                                mime: 'application/x-msi',
+                                minimumRequiredBytes: index + 16
+                            }];
+                    }
+                    // If the CLSID block is located within the buffer, it will try to identify its file type (.doc, .xls, .ppt) by CLSID.
+                    if (check([0x06, 0x09, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x46], { offset: index })) {
+                        return [2 /*return*/, {
+                                ext: 'doc',
+                                mime: 'application/msword'
+                            }];
+                    }
+                    if (check([0x10, 0x08, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x46], { offset: index })) {
+                        return [2 /*return*/, {
+                                ext: 'xls',
+                                mime: 'application/vnd.ms-excel'
+                            }];
+                    }
+                    if (check([0x20, 0x08, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x46], { offset: index })) {
+                        return [2 /*return*/, {
+                                ext: 'xls',
+                                mime: 'application/vnd.ms-excel'
+                            }];
+                    }
+                    if (check([0x10, 0x8D, 0x81, 0x64, 0x9B, 0x4F, 0xCF, 0x11, 0x86, 0xEA, 0x00, 0xAA, 0x00, 0xB9, 0x29, 0xE8], { offset: index })) {
+                        return [2 /*return*/, {
+                                ext: 'ppt',
+                                mime: 'application/vnd.ms-powerpoint'
+                            }];
+                    }
+                }
+                return [2 /*return*/, type];
         }
-        return true;
-    };
-    var type = file_type_1.default(buffer);
-    if (type == null || (type && type.ext === 'msi')) {
-        // Use CLSIDs to check old Microsoft Office file types: .doc, .xls, .ppt
-        // Ref: http://fileformats.archiveteam.org/wiki/Microsoft_Compound_File
-        var sectorSize = 1 << buffer[30];
-        var index = (buffer[49] * 256) + buffer[48];
-        index = ((index + 1) * sectorSize) + 80;
-        // If the CLSID block is located outside the buffer, it will return an extra field `minimumRequiredBytes`.
-        // Therefore, user can optionally retry it with a larger buffer.
-        if (index + 16 > buffer.length) {
-            return {
-                ext: 'msi',
-                mime: 'application/x-msi',
-                minimumRequiredBytes: index + 16
-            };
-        }
-        // If the CLSID block is located within the buffer, it will try to identify its file type (.doc, .xls, .ppt) by CLSID.
-        if (check([0x06, 0x09, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x46], { offset: index })) {
-            return {
-                ext: 'doc',
-                mime: 'application/msword'
-            };
-        }
-        if (check([0x10, 0x08, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x46], { offset: index })) {
-            return {
-                ext: 'xls',
-                mime: 'application/vnd.ms-excel'
-            };
-        }
-        if (check([0x20, 0x08, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x46], { offset: index })) {
-            return {
-                ext: 'xls',
-                mime: 'application/vnd.ms-excel'
-            };
-        }
-        if (check([0x10, 0x8D, 0x81, 0x64, 0x9B, 0x4F, 0xCF, 0x11, 0x86, 0xEA, 0x00, 0xAA, 0x00, 0xB9, 0x29, 0xE8], { offset: index })) {
-            return {
-                ext: 'ppt',
-                mime: 'application/vnd.ms-powerpoint'
-            };
-        }
-        if (type && type.ext === "msi") {
-            return {
-                ext: 'msi',
-                mime: 'application/x-msi'
-            };
-        }
-    }
-    return type;
-};
-exports.minimumBytes = file_type_1.default.minimumBytes;
+    });
+}); };
+exports.fileTypeExt = fileTypeExt;
+// Value from https://github.com/sindresorhus/file-type/blob/e4a809e38ccf6b4fdfa457fecf816b4f9f0dbc40/core.js#L11
+// Used to be exposed, no longer is (https://github.com/sindresorhus/file-type/issues/381)
+exports.minimumBytes = 4100;
 exports.fileTypeExt.stream = function (readableStream) {
     var readBytes = function (rs, num) {
         if (num === void 0) { num = 0; }
@@ -154,7 +157,9 @@ exports.fileTypeExt.stream = function (readableStream) {
                     return [4 /*yield*/, readBytes(inputStream, minimumBytes)];
                 case 1:
                     chunk = _a.sent();
-                    ft = exports.fileTypeExt(chunk);
+                    return [4 /*yield*/, (0, exports.fileTypeExt)(chunk)];
+                case 2:
+                    ft = _a.sent();
                     outputStream.write(chunk);
                     if (stream.pipeline) {
                         stream.pipeline(inputStream, outputStream, function () { return ({}); });

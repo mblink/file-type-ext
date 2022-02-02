@@ -6,6 +6,9 @@ For none ms office files, it works same as `file-type`, but for these ancient fi
 # Install
 `$ npm install file-type-ext`
 
+# Gotchas
+- v2.0.0 must be built using v16.11.10 of node (same version as node that `file-type` v17.1.1 is built with).
+
 # Usage
 From a **stream**, `file-type-ext` uses the same interface as `file-type`
 ```
