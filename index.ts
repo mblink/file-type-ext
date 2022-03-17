@@ -1,4 +1,4 @@
-import {fileTypeFromBuffer, FileExtension as FT, FileTypeResult as FTR, MimeType as MT} from "file-type";
+import { FileExtension as FT, fromBuffer, FileTypeResult as FTR, MimeType as MT } from "file-type";
 
 export type FileType = FT
     | "msi"
@@ -46,7 +46,7 @@ export const fileTypeExt = async (input: Buffer | Uint8Array | ArrayBuffer): Pro
         return true;
     };
 
-    const type = await fileTypeFromBuffer(buffer)
+    const type = await fromBuffer(buffer)
     if(type == null) {
         // Use CLSIDs to check old Microsoft Office file types: .doc, .xls, .ppt
         // Ref: http://fileformats.archiveteam.org/wiki/Microsoft_Compound_File

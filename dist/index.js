@@ -65,7 +65,7 @@ var fileTypeExt = function (input) { return __awaiter(void 0, void 0, void 0, fu
                     }
                     return true;
                 };
-                return [4 /*yield*/, (0, file_type_1.fileTypeFromBuffer)(buffer)];
+                return [4 /*yield*/, (0, file_type_1.fromBuffer)(buffer)];
             case 1:
                 type = _a.sent();
                 if (type == null) {
