@@ -1,4 +1,4 @@
-import { FileExtension as FT, fromBuffer, FileTypeResult as FTR, MimeType as MT } from "file-type";
+import { FileExtension as FT, fromBuffer, FileTypeResult as FTR, MimeType as MT } from "file-type/browser";
 
 export type FileType = FT
     | "msi"

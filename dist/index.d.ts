@@ -1,4 +1,4 @@
-import { FileExtension as FT, FileTypeResult as FTR, MimeType as MT } from "file-type";
+import { FileExtension as FT, FileTypeResult as FTR, MimeType as MT } from "file-type/browser";
 export declare type FileType = FT | "msi" | "doc" | "xls" | "ppt";
 export declare type MimeType = MT | 'application/x-msi' | 'application/msword' | 'application/vnd.ms-excel' | 'application/vnd.ms-powerpoint';
 export declare type FileTypeResult = {
