@@ -1,4 +1,3 @@
-"use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -35,10 +34,8 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.minimumBytes = exports.fileTypeExt = void 0;
-var file_type_1 = require("file-type");
-var fileTypeExt = function (input) { return __awaiter(void 0, void 0, void 0, function () {
+import { fileTypeFromBuffer } from "file-type";
+export var fileTypeExt = function (input) { return __awaiter(void 0, void 0, void 0, function () {
     var buffer, check, type, sectorSize, index;
     return __generator(this, function (_a) {
         switch (_a.label) {
@@ -65,7 +62,7 @@ var fileTypeExt = function (input) { return __awaiter(void 0, void 0, void 0, fu
                     }
                     return true;
                 };
-                return [4 /*yield*/, (0, file_type_1.fileTypeFromBuffer)(buffer)];
+                return [4 /*yield*/, fileTypeFromBuffer(buffer)];
             case 1:
                 type = _a.sent();
                 if (type == null) {
@@ -111,11 +108,10 @@ var fileTypeExt = function (input) { return __awaiter(void 0, void 0, void 0, fu
         }
     });
 }); };
-exports.fileTypeExt = fileTypeExt;
 // Value from https://github.com/sindresorhus/file-type/blob/e4a809e38ccf6b4fdfa457fecf816b4f9f0dbc40/core.js#L11
 // Used to be exposed, no longer is (https://github.com/sindresorhus/file-type/issues/381)
-exports.minimumBytes = 4100;
-exports.fileTypeExt.stream = function (readableStream) {
+export var minimumBytes = 4100;
+fileTypeExt.stream = function (readableStream) {
     var readBytes = function (rs, num) {
         if (num === void 0) { num = 0; }
         return rs.read(num) || new Promise(function (resolve, reject) {
@@ -154,7 +150,7 @@ exports.fileTypeExt.stream = function (readableStream) {
                     return [4 /*yield*/, readBytes(inputStream, minimumBytes)];
                 case 1:
                     chunk = _a.sent();
-                    return [4 /*yield*/, (0, exports.fileTypeExt)(chunk)];
+                    return [4 /*yield*/, fileTypeExt(chunk)];
                 case 2:
                     ft = _a.sent();
                     outputStream.write(chunk);
@@ -172,6 +168,6 @@ exports.fileTypeExt.stream = function (readableStream) {
             }
         });
     }); };
-    return streamFileType(readableStream, exports.minimumBytes);
+    return streamFileType(readableStream, minimumBytes);
 };
 //# sourceMappingURL=index.js.map

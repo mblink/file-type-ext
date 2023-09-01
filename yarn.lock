@@ -614,22 +614,22 @@ __metadata:
     "@typescript-eslint/parser": "npm:6.5.0"
     eslint: "npm:8.48.0"
     eslint-plugin-simple-import-sort: "npm:10.0.0"
-    file-type: "npm:17.1.1"
+    file-type: "npm:18.5.0"
     read-chunk: "npm:4.0.3"
     typescript: "npm:5.2.2"
   peerDependencies:
-    file-type: 17.1.1
+    file-type: 18.5.0
   languageName: unknown
   linkType: soft
 
-"file-type@npm:17.1.1":
-  version: 17.1.1
-  resolution: "file-type@npm:17.1.1"
+"file-type@npm:18.5.0":
+  version: 18.5.0
+  resolution: "file-type@npm:18.5.0"
   dependencies:
     readable-web-to-node-stream: "npm:^3.0.2"
-    strtok3: "npm:^7.0.0-alpha.7"
-    token-types: "npm:^5.0.0-alpha.2"
-  checksum: aadcc4151167fd7c2af4001a22fdafd3dd42181cba30a73e7ffa02bd6a22317a893f7f11941103ac2ca8930ecc2f1cf106592eb88db263cea534609b0a5dfa41
+    strtok3: "npm:^7.0.0"
+    token-types: "npm:^5.0.1"
+  checksum: cb13f3c0a708b0ec1fdcce324ba349b3edbc2beec2e2a1a11574b3b40f650d13b47e8266164b0fe51520e6faecc007a6093187750f3ca26061c94cf7505e7dff
   languageName: node
   linkType: hard
 
@@ -1196,7 +1196,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"strtok3@npm:^7.0.0-alpha.7":
+"strtok3@npm:^7.0.0":
   version: 7.0.0
   resolution: "strtok3@npm:7.0.0"
   dependencies:
@@ -1231,7 +1231,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"token-types@npm:^5.0.0-alpha.2":
+"token-types@npm:^5.0.1":
   version: 5.0.1
   resolution: "token-types@npm:5.0.1"
   dependencies:
