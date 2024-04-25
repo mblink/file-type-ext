@@ -47,7 +47,7 @@ export const fileTypeExt = async (input: Buffer | Uint8Array | ArrayBuffer): Pro
     };
 
     const type = await fileTypeFromBuffer(buffer)
-    if(type == null) {
+    if (type == null || type.mime === "application/x-cfb") {
         // Use CLSIDs to check old Microsoft Office file types: .doc, .xls, .ppt
         // Ref: http://fileformats.archiveteam.org/wiki/Microsoft_Compound_File
         const sectorSize = 1 << buffer[30];

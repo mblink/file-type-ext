@@ -65,7 +65,7 @@ export var fileTypeExt = function (input) { return __awaiter(void 0, void 0, voi
                 return [4 /*yield*/, fileTypeFromBuffer(buffer)];
             case 1:
                 type = _a.sent();
-                if (type == null) {
+                if (type == null || type.mime === "application/x-cfb") {
                     sectorSize = 1 << buffer[30];
                     index = (buffer[49] * 256) + buffer[48];
                     index = ((index + 1) * sectorSize) + 80;
